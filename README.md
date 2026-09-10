@@ -47,13 +47,15 @@ STORAGE3_URL_STYLE
 
 `*_URL_STYLE` is optional and defaults to `virtual`. Railway buckets created with legacy path-style addressing can set it to `path`.
 
-Optional quality thresholds:
+Optional quality thresholds are orientation-aware, so portrait and landscape footage are treated equally:
 
 ```text
-MIN_VIDEO_WIDTH=1280
-MIN_VIDEO_HEIGHT=720
+MIN_VIDEO_LONG_SIDE=1280
+MIN_VIDEO_SHORT_SIDE=720
 MIN_VIDEO_FPS=24
 ```
+
+For a stricter Full-HD production gate, use `1920`, `1080` and the required FPS. FFprobe also records HDR transfer metadata when present.
 
 ## API
 
