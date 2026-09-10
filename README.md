@@ -62,11 +62,14 @@ For a stricter Full-HD production gate, use `1920`, `1080` and the required FPS.
 All `/v1/*` endpoints require either `Authorization: Bearer <internal token>` or `x-kcd-internal-token`.
 
 - `GET /healthz` - public liveness probe, 204.
-- `GET /v1/capabilities` - storage/tool readiness without exposing credentials.
+- `GET /v1/capabilities` - configured pipeline and FFmpeg/FFprobe status without exposing credentials.
+- `GET /v1/readiness` - performs a real write+HEAD check against Storage1, Storage2 and Storage3 plus media-tool checks.
 - `POST /v1/videos/create-upload` - creates a Storage1 presigned upload URL.
 - `POST /v1/videos/confirm-stage` - verifies an uploaded stage object, probes it with FFprobe and stores a manifest.
 - `POST /v1/videos/handoff` - creates a read URL for the current stage and an upload URL for the next stage.
 - `POST /v1/videos/recheck` - technical QC of Storage3 and copy to Storage1 `final/` or `retry/`.
+
+At process startup the same storage/tool readiness check runs once and emits only sanitized status information to Railway logs. This verifies that the bucket credentials and S3 signing are actually usable without exposing those credentials.
 
 ### Example: create an upload
 
