@@ -7,8 +7,11 @@ on:
 permissions:
   contents: read
 
+env:
+  FORCE_COLOR: "0"
+
 jobs:
-  security-audit:
+  security:
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
@@ -16,6 +19,10 @@ jobs:
         uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09
         with:
           persist-credentials: false
-
-      - name: Run repository security audit
+      - name: Setup Node 22
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version: "22"
+          check-latest: false
+      - name: Security audit
         run: node tools/security-audit.mjs

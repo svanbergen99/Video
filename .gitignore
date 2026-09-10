@@ -1,58 +1,32 @@
-# Secrets and credentials
+node_modules/
 .env
 .env.*
+!.env.example
 *.pem
 *.key
 *.p12
 *.pfx
 *.jks
 *.keystore
-credentials*
-secrets*
-service-account*
-
-# Dependencies and virtual environments
-node_modules/
-.venv/
-venv/
-__pycache__/
-*.pyc
-
-# Runtime output and local state
-coverage/
-dist/
-build/
-.tmp/
-tmp/
-.cache/
 *.log
-*.pid
-
-# Databases, exports and raw data
-*.db
+*.map
+*.sql
 *.sqlite
 *.sqlite3
-*.sql
+*.db
 *.dump
-*.csv
-*.tsv
-*.xlsx
-*.xls
-*.parquet
-*.ndjson
-
-# Archives and backups
+*.bak
+*.backup
 *.zip
 *.7z
 *.rar
 *.tar
 *.tgz
 *.gz
-*.bak
-*.backup
-
-# Editor / OS noise
+coverage/
+dist/
+build/
+.tmp/
+tmp/
 .DS_Store
 Thumbs.db
-.idea/
-.vscode/
