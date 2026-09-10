@@ -1,6 +1,6 @@
 import { createServer } from "node:http";
 import { timingSafeEqual } from "node:crypto";
-import { capabilities, confirmStage, createUpload, handoff, recheck } from "./lib/pipeline.mjs";
+import { capabilities, confirmStage, createUpload, handoff, recheck, storageReadiness } from "./lib/pipeline.mjs";
 import { mediaToolStatus } from "./lib/media.mjs";
 
 const PORT = Number.parseInt(process.env.PORT ?? "3000", 10);
@@ -131,6 +131,7 @@ async function route(request, response, pathname) {
 
   const allowed = new Map([
     ["/v1/capabilities", "GET"],
+    ["/v1/readiness", "GET"],
     ["/v1/videos/create-upload", "POST"],
     ["/v1/videos/confirm-stage", "POST"],
     ["/v1/videos/handoff", "POST"],
@@ -147,7 +148,13 @@ async function route(request, response, pathname) {
   if (method === "GET") {
     if (hasRequestBodyHeaders(request)) return sendText(response, 400, "Bad request\n", method);
     const tools = await mediaToolStatus();
-    return sendJson(response, 200, { service: "Video", version: "2.0.0", ...capabilities(), tools }, method);
+    if (pathname === "/v1/readiness") {
+      const storage = await storageReadiness();
+      const ready = Object.values(storage).every((item) => item.configured && item.reachable)
+        && Object.values(tools).every((item) => item.available);
+      return sendJson(response, ready ? 200 : 503, { service: "Video", ready, tools, storage }, method);
+    }
+    return sendJson(response, 200, { service: "Video", version: "2.1.0", ...capabilities(), tools }, method);
   }
 
   const body = await readJsonBody(request);
@@ -188,7 +195,20 @@ export function createAppServer() {
   return server;
 }
 
+async function logStartupReadiness() {
+  const tools = await mediaToolStatus();
+  const storage = await storageReadiness();
+  const ready = Object.values(storage).every((item) => item.configured && item.reachable)
+    && Object.values(tools).every((item) => item.available);
+  console.log(JSON.stringify({ event: "video_engine_readiness", ready, tools, storage }));
+}
+
 if (import.meta.url === `file://${process.argv[1]}`) {
   const server = createAppServer();
-  server.listen(PORT, "0.0.0.0");
+  server.listen(PORT, "0.0.0.0", () => {
+    console.log(JSON.stringify({ event: "video_engine_started", port: PORT }));
+    logStartupReadiness().catch((error) => {
+      console.warn(JSON.stringify({ event: "video_engine_readiness_error", error: String(error?.message || "unknown").slice(0, 180) }));
+    });
+  });
 }
