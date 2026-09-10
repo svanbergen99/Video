@@ -1,0 +1,58 @@
+# Secrets and credentials
+.env
+.env.*
+*.pem
+*.key
+*.p12
+*.pfx
+*.jks
+*.keystore
+credentials*
+secrets*
+service-account*
+
+# Dependencies and virtual environments
+node_modules/
+.venv/
+venv/
+__pycache__/
+*.pyc
+
+# Runtime output and local state
+coverage/
+dist/
+build/
+.tmp/
+tmp/
+.cache/
+*.log
+*.pid
+
+# Databases, exports and raw data
+*.db
+*.sqlite
+*.sqlite3
+*.sql
+*.dump
+*.csv
+*.tsv
+*.xlsx
+*.xls
+*.parquet
+*.ndjson
+
+# Archives and backups
+*.zip
+*.7z
+*.rar
+*.tar
+*.tgz
+*.gz
+*.bak
+*.backup
+
+# Editor / OS noise
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
