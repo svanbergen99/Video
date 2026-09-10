@@ -6,8 +6,8 @@ const ROOT = process.cwd();
 const findings = [];
 const CRITICAL_CONTROLS = new Map([
   [".github/workflows/security-audit.yml", "ff8d3e2f54f7d7f7c7881a38c0158309ff044612"],
-  ["tools/security-audit.mjs", "60934ea0159259170fcf01c2812b7612369636b1"],
-  ["tools/runtime-security-test.mjs", "f60e2c4ff34909451d7f2d56373f8822f6c832aa"]
+  ["tools/security-audit.mjs", "cf45f9fe9bfbf5e4512dfbd1ddd2ee7b80145749"],
+  ["tools/runtime-security-test.mjs", "2cde24d99518e4ae3ea46f4405cb48c0dc72eb2b"]
 ]);
 const forbiddenNames = [
   /(^|\/)(?:\.env(?:\..+)?|id_rsa|id_ed25519)$/i,
